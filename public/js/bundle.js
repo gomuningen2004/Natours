@@ -2520,9 +2520,7 @@
   // public/js/stripe.js
   async function bookTour(tourId) {
     try {
-      const res = await axios_default(
-        `http://127.0.0.1:8000/api/v1/bookings/checkout-session/${tourId}`
-      );
+      const res = await axios_default(`/api/v1/bookings/checkout-session/${tourId}`);
       if (res.status === 200) location.assign(res.data.session.url);
     } catch (err) {
       showAlert("error", err.message);
@@ -2576,7 +2574,7 @@
     try {
       const res = await axios({
         method: "POST",
-        url: "http://127.0.0.1:8000/api/v1/users/login",
+        url: "/api/v1/users/login",
         data: { email, password }
       });
       if (res.data.status === "success") {
@@ -2593,7 +2591,7 @@
     try {
       const res = await axios({
         method: "GET",
-        url: "http://127.0.0.1:8000/api/v1/users/logout"
+        url: "/api/v1/users/logout"
       });
       if (res.data.status === "success") location.assign("/");
     } catch (err) {
@@ -2604,7 +2602,7 @@
   // public/js/updateSettings.js
   async function updateSettings(data, type) {
     try {
-      const url = type === "password" ? "http://127.0.0.1:8000/api/v1/users/updateMyPassword" : "http://127.0.0.1:8000/api/v1/users/updateMe";
+      const url = type === "password" ? "/api/v1/users/updateMyPassword" : "/api/v1/users/updateMe";
       const res = await axios({ method: "PATCH", url, data });
       if (res.data.status === "success") {
         showAlert("success", `${type.toUpperCase()}  updated successfully`);
