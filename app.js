@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './config.env' });
 
 import hpp from 'hpp';
+import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import express from 'express';
@@ -28,6 +29,10 @@ app.enable('trust-proxy');
 
 app.set('view engine', 'pug');
 app.set('views', './views');
+
+app.use(cors());
+app.options('*', cors());
+
 app.use(express.static('./public'));
 
 app.set('query parser', 'extended');
