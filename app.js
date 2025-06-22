@@ -25,8 +25,6 @@ const BOOKINGS_URL = '/api/v1/bookings';
 
 export const app = express();
 
-app.enable('trust-proxy');
-
 app.set('view engine', 'pug');
 app.set('views', './views');
 app.use(express.static('./public'));
@@ -58,6 +56,8 @@ app.use(
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+app.enable('trust-proxy');
 
 const limiter = rateLimit({
   max: 100,
