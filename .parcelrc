@@ -1,0 +1,4 @@
+{
+  "extends": "@parcel/config-default",
+  "filePath": "./public/js/index.js"
+}
