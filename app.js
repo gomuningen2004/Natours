@@ -24,6 +24,8 @@ const BOOKINGS_URL = '/api/v1/bookings';
 
 export const app = express();
 
+app.enable('trust-proxy');
+
 app.set('view engine', 'pug');
 app.set('views', './views');
 app.use(express.static('./public'));

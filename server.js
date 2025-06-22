@@ -30,3 +30,10 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   });
 });
+
+process.on('SIGTERM', () => {
+  console.log('The site will be back in few minutes.');
+  server.close(() => {
+    console.log('Please wait for a while');
+  });
+});
