@@ -16,6 +16,7 @@ import userRouter from './routes/userRoutes.js';
 import { viewRouter } from './routes/viewRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
+import { webhookCheckout } from './controllers/bookingController.js';
 import { globalErrorHandler } from './controllers/errorController.js';
 
 const BASE_URL = '/api/v1/tours';
@@ -69,6 +70,12 @@ const limiter = rateLimit({
   message: 'Too many requests, please try again in an hour!',
 });
 app.use('/api', limiter);
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  webhookCheckout
+);
 
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));

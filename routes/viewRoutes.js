@@ -1,16 +1,10 @@
 import express from 'express';
 import * as viewController from '../controllers/viewController.js';
 import * as authController from '../controllers/authController.js';
-import * as bookingController from '../controllers/bookingController.js';
 
 export const viewRouter = express.Router();
 
-viewRouter.get(
-  '/',
-  bookingController.createBookinCheckout,
-  authController.isLoggedIn,
-  viewController.getOverView
-);
+viewRouter.get('/', authController.isLoggedIn, viewController.getOverView);
 viewRouter.get(
   '/tour/:tourSlug',
   authController.isLoggedIn,
