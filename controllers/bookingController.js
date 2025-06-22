@@ -27,7 +27,11 @@ export const getCheckoutSession = catchAsync(async (req, res, next) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [`https://natours.dev/img/tours/${tour.imageCover}`],
+            images: [
+              `${req.protocol}://${req.get('host')}/img/tours/${
+                tour.imageCover
+              }`,
+            ],
           },
         },
         quantity: 1,
@@ -39,7 +43,7 @@ export const getCheckoutSession = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', session });
 });
 
-export async function webhookCheckout(req, res, next) {
+export function webhookCheckout(req, res, next) {
   const sig = req.headers['stripe-signature'];
   let evt;
 
@@ -49,28 +53,24 @@ export async function webhookCheckout(req, res, next) {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
-
-    if (evt.type === 'checkout.session.completed') {
-      const session = evt.data.object;
-      const tour = session.client_reference_id;
-      const user = (await User.findOne({ email: session.customer_email })).id;
-
-      const lineItems = await stripe.checkout.sessions.listLineItems(
-        session.id,
-        { limit: 1 }
-      );
-
-      const price = lineItems.data[0].amount_total / 100;
-
-      await Booking.create({ tour, user, price });
-    }
-
-    res.status(200).json({ received: true });
   } catch (err) {
     console.error('Webhook error:', err.message);
     res.status(400).send(`Webhook error: ${err.message}`);
   }
+
+  if (evt.type === 'checkout.session.completed') {
+    createBookingCheckout(evt.data.object);
+  }
+
+  res.status(200).json({ received: true });
 }
+
+const createBookingCheckout = async (session) => {
+  const tour = session.client_reference_id;
+  const user = (await User.findOne({ email: session.customer_email })).id;
+  const price = session.amount_total / 100;
+  await Booking.create({ tour, user, price });
+};
 
 export const getAllBookings = factory.getAll(Booking);
 export const getBooking = factory.getOne(Booking);
