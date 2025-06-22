@@ -120,7 +120,7 @@ app.use(USERS_URL, userRouter);
 app.use(REVIEWS_URL, reviewRouter);
 app.use(BOOKINGS_URL, bookingRouter);
 
-app.all('*', (req, res, next) => {
+app.all('/{*any}', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
