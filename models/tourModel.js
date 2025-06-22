@@ -128,17 +128,6 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
-// tourSchema.pre(
-//   'save',
-//   catchAsync(async function (next) {
-//     const guidesPromises = this.guides.map(
-//       async (id) => await User.find({ id })
-//     );
-//     this.guides = await Promise.all(guidesPromises);
-//     next();
-//   })
-// );
-
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   this.start = Date.now();
@@ -150,9 +139,9 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-// tourSchema.pre('aggregate', function (next) {
-//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-//   next();
-// });
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  next();
+});
 
 export const Tour = mongoose.model('Tour', tourSchema);

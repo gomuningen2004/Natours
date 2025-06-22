@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import express from 'express';
 import { filterXSS } from 'xss';
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { AppError } from './utils/appError.js';
@@ -96,6 +97,8 @@ app.use(
     ],
   })
 );
+
+app.use(compression());
 
 app.use('/', viewRouter);
 app.use(BASE_URL, tourRouter);
