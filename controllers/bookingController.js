@@ -44,6 +44,7 @@ export const getCheckoutSession = catchAsync(async (req, res, next) => {
 });
 
 export function webhookCheckout(req, res, next) {
+  console.log('Hello from webhook function');
   const sig = req.headers['stripe-signature'];
   let evt;
 
@@ -66,6 +67,7 @@ export function webhookCheckout(req, res, next) {
 }
 
 const createBookingCheckout = async (session) => {
+  console.log('Hello from booking generator');
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.amount_total / 100;
